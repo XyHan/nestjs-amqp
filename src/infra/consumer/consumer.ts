@@ -9,7 +9,7 @@ import { AmqpAdapter, IAmqp } from '../adapter/amqp.adapter';
 import { AmqpEventBus, IAmqpEventBus } from '../bus/event/amqp.event.bus';
 
 export interface IConsumer {
-    consume(): Promise<void>;
+    consume(queue: string): Promise<void>;
 }
 
 @Injectable()
@@ -19,10 +19,9 @@ export class Consumer implements IConsumer {
         @Inject(AmqpAdapter) private readonly amqp: IAmqp,
     ) {}
 
-    public async consume(): Promise<void> {
+    public async consume(queue: string): Promise<void> {
         try {
-            await this.amqp.connect();
-            await this.amqp.consume('', (msg: ConsumeMessage) => {
+            await this.amqp.consume(queue, (msg: ConsumeMessage) => {
                 const event: IAmqpEvent | null = this.getEventFromMessage(msg);
                 if (event === null) {
                     this.amqp.reject(msg);
