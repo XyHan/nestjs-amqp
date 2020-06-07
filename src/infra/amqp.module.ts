@@ -6,6 +6,7 @@ import { AmqpCommandBus } from './bus/command/amqp.command.bus';
 import { AmqpEventBus } from './bus/event/amqp.event.bus';
 import { envelopeFactory } from './provider/envelope.factory.provider';
 import { IAmqpConfig } from '../domain/config/amqp.config';
+import { BridgeBusRabbitMq } from './bridge/amqp.bridge-bus';
 
 @Module({
   providers: [
@@ -15,6 +16,7 @@ import { IAmqpConfig } from '../domain/config/amqp.config';
       AmqpCommandBus,
       AmqpEventBus,
       envelopeFactory,
+      BridgeBusRabbitMq,
   ],
   exports: [
       AmqpAdapter,

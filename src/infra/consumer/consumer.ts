@@ -21,6 +21,7 @@ export class Consumer implements IConsumer {
 
     public async consume(queue: string): Promise<void> {
         try {
+            await this.amqp.connect();
             await this.amqp.consume(queue, (msg: ConsumeMessage) => {
                 const event: IAmqpEvent | null = this.getEventFromMessage(msg);
                 if (event === null) {

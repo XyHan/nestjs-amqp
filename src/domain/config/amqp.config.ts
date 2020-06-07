@@ -1,4 +1,9 @@
 export interface IAmqpConfig {
+    config: IConnection;
+    definition: IDefinition;
+}
+
+export interface IConnection {
     hostname: string;
     port: number;
     username: string;
@@ -6,50 +11,19 @@ export interface IAmqpConfig {
     vhost: string;
 }
 
-export class AmqpConfig implements IAmqpConfig {
-    private _hostname: string;
-    private _password: string;
-    private _port: number;
-    private _username: string;
-    private _vhost: string;
+export interface IDefinition {
+    exchanges: IExchange[];
+    queues: IQueue[];
+}
 
-    get hostname(): string {
-        return this._hostname;
-    }
+export interface IExchange {
+    name: string;
+    type: string;
+    options: object;
+}
 
-    set hostname(value: string) {
-        this._hostname = value;
-    }
-
-    get password(): string {
-        return this._password;
-    }
-
-    set password(value: string) {
-        this._password = value;
-    }
-
-    get port(): number {
-        return this._port;
-    }
-
-    set port(value: number) {
-        this._port = value;
-    }
-
-    get username(): string {
-        return this._username;
-    }
-
-    set username(value: string) {
-        this._username = value;
-    }
-
-    get vhost(): string {
-        return this._vhost;
-    }
-
-    set vhost(value: string) {
-        this._vhost = value;
-    }
+export interface IQueue {
+    name: string;
+    exchange: string;
+    options: object;
 }

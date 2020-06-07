@@ -1,7 +1,7 @@
 import { Connection, connect, Channel, ConsumeMessage } from 'amqplib';
 import { Inject, Injectable } from '@nestjs/common';
 import { Message, Options } from 'amqplib/properties';
-import { IAmqpConfig } from '../../domain/config/amqp.config';
+import { IAmqpConfig, IExchange, IQueue } from '../../domain/config/amqp.config';
 import { AmqpAdapterError } from './amqp.adapter.error';
 
 export interface IAmqp {
@@ -23,14 +23,21 @@ export class AmqpAdapter implements IAmqp {
     private channel: Channel;
 
     constructor(
-        @Inject('AMQP_CONFIG') private readonly configService: IAmqpConfig,
+        @Inject('AMQP_CONFIG') private readonly amqpConfig: IAmqpConfig,
     ) {}
 
     async connect(): Promise<void> {
         try {
             if (this.connection === undefined || this.channel === undefined) {
-                this.connection = await connect(this.configService);
+                this.connection = await connect(this.amqpConfig.config);
                 this.channel = await this.connection.createChannel();
+                await this.amqpConfig.definition.exchanges.forEach((exchange: IExchange) => {
+                    this.assertExchange(exchange.name, exchange.type, exchange.options);
+                });
+                await this.amqpConfig.definition.queues.forEach((queue: IQueue) => {
+                    this.assertQueue(queue.name, queue.options);
+                    this.bindQueue(queue.name, queue.exchange, '');
+                });
             }
         } catch (e) {
             throw new AmqpAdapterError(e.message);
