@@ -1,8 +1,14 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { AmqpModule } from './infra/amqp.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AmqpModule.register({
+    hostname: '',
+    port: 5601,
+    username: '',
+    password: '',
+    vhost: '',
+  }));
   await app.listen(3000);
 }
 bootstrap();
