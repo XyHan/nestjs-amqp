@@ -31,6 +31,7 @@ export class Publisher implements IPublisher {
     }
 
     private async sendMessage(exchange: string, routingKey: string, message: Buffer): Promise<void> {
+        await this.amqp.connect();
         await this.amqp.publish(exchange, routingKey, message);
     }
 }

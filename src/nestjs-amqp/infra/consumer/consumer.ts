@@ -22,12 +22,12 @@ export class Consumer implements IConsumer {
     public async consume(queue: string): Promise<void> {
         try {
             await this.amqp.connect();
-            await this.amqp.consume(queue, (msg: ConsumeMessage) => {
-                const event: IAmqpEvent | null = this.getEventFromMessage(msg);
+            await this.amqp.consume(queue, (message: ConsumeMessage) => {
+                const event: IAmqpEvent | null = this.getEventFromMessage(message);
                 if (event === null) {
-                    this.amqp.reject(msg);
+                    this.amqp.reject(message);
                 } else {
-                    this.amqp.ack(msg);
+                    this.amqp.ack(message);
                     this.eventBus.publish(event);
                 }
             });

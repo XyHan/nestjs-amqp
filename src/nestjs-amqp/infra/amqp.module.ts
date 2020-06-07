@@ -35,9 +35,7 @@ export class AmqpModule {
                     provide: 'AMQP_CONFIG',
                     useValue: config,
                 },
-                AmqpAdapter,
             ],
-            exports: [AmqpAdapter],
         };
     }
 }

@@ -1,5 +1,5 @@
 import { NestFactory } from '@nestjs/core';
-import { AmqpModule } from './infra/amqp.module';
+import { AmqpModule } from './nestjs-amqp/infra/amqp.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AmqpModule.register({
