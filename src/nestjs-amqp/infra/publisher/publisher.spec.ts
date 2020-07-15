@@ -3,13 +3,16 @@ import { EnvelopeFactory } from '../../domain/factory/envelope.factory';
 import { Publisher } from './publisher';
 import { AmqpCommand } from '../../application/command/amqp.command';
 import { PublisherError } from './publisher.error';
-import {IAmqp} from '../adapter/amqp.adapter';
+import { IAmqp } from '../adapter/amqp.adapter';
 
 describe('Publisher', () => {
     const requestId = '84d03f45-7511-4cc5-b034-c686829abd29';
 
     it('publish success', async () => {
         const amqpMock: IAmqp = {
+            assertExchange: jest.fn(),
+            assertQueue: jest.fn(),
+            bindQueue: jest.fn(),
             ack: jest.fn(),
             closeChannel: jest.fn(),
             closeConnection: jest.fn(),
@@ -33,6 +36,9 @@ describe('Publisher', () => {
 
     it('publish failed', async () => {
         const amqpMock: IAmqp = {
+            assertExchange: jest.fn(),
+            assertQueue: jest.fn(),
+            bindQueue: jest.fn(),
             ack: jest.fn(),
             closeChannel: jest.fn(),
             closeConnection: jest.fn(),
